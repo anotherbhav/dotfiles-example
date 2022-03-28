@@ -1,40 +1,5 @@
 #/usr/bin/env zsh
 
-# way to get script name
-SCRIPT="${0##*/}"
-SCRIPT_PATH="${0%/*}"
-
-#YADM
-# its running from yadm; change PWD to repo dir
-if echo "$SCRIPT_PATH" | egrep 'yadm' > /dev/null 2>&1; then
-    echo its yadm time
-    REAL_PATH_DIR=$(readlink $0)
-    REAL_PATH_DIR="${REAL_PATH_DIR%/*}"
-    echo REAL_PATH_DIR $REAL_PATH_DIR
-    PWD="$REAL_PATH_DIR"
-fi
-
-# Check if YADM exists; create bootstrap
-if ls "$HOME/.config/yadm/" > /dev/null 2>&1; then
-    which echo
-    echo "yadm config dir exists"
-else
-    echo "yadm config dir doesn't exist; create it"
-    mkdir -p "$HOME/.config/yadm/"
-fi
-
-# Check if YADM bootsrap file exists; create bootstrap
-if ls "$HOME/.config/yadm/bootstrap" > /dev/null 2>&1; then
-    echo "yadm bootstrap present"
-else
-    echo "yadm bootstrap file does not exist"
-    if echo "$SCRIPT" | egrep '^bootstrap.sh$' > /dev/null 2>&1; then
-        # we are running the actual script - symlink the yadm
-        ln -s "${PWD}/$SCRIPT" "$HOME/.config/yadm/bootstrap"
-    fi
-fi
-
-
 # See if Brew is installed
 command -V brew
 
